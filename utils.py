@@ -36,7 +36,7 @@ def init_batch(inputs, batch_size):
         batchs.append(inputs[:,i * batch_size : (i+1) * batch_size])
     if len(inputs[0]) % batch_size:
         batchs.append(inputs[:, num_full_batch * batch_size :])
-    return batchs
+    return np.asarray(batchs)
 # print(init_batch(x_train_flatten, BATCH_SIZE))
 
 #Initialize parameters
@@ -55,25 +55,25 @@ def init_parameters(layers):
 #forward propagation using only logistic regression function
 def sigmoid(X, w):
     z = np.dot(w, X)
-    print(z)
+    # print(z)
     res = np.divide(1, 1 + np.exp(-z))
     return res 
 
 # print(sigmoid(x_train_flatten[:, 1], parameters[0]))
 
-def mean_square_cost(A, Y):
+def mean_square_cost(X, A, Y):
     m = Y.shape[1]
-    cost = (1 / m) * np.sum(A - Y)
-    dw = (1 / m) * 2 * (A - Y) * A * (1 - A)
+    cost = (1 / m) * np.sum(np.square(A - Y))
+    dw = (1 / m) * np.dot(X, (2 * (A - Y) * A * (1 - A)).T)
     return cost, dw
     
-def corss_entropy_cost(A, Y):
+def corss_entropy_cost(X, A, Y):
     m = Y.shape[1]
     cost = (-1 / m) * np.sum(Y * np.log(A) + (1 - Y) * np.log(1 - A)) 
-    dw = (1 / m) * np.dot(A, (A-Y).T)
+    dw = (1 / m) * np.dot(X, (A-Y).T)
     return cost, dw
 
-def train(w, X, Y, num_iterations, learning_rate, batch_size):
+def update_parameters(w, X, Y, num_iterations, learning_rate, batch_size):
     pass
 
 
