@@ -2,36 +2,39 @@ import numpy as np
 import math
 from keras.datasets import mnist
 
-#Hyper parameters
-EPOCH = 1
-BATCH_SIZE = 100
-LEARNINT_RATE = 0.01
+# #Hyper parameters
+# EPOCH = 1
+# BATCH_SIZE = 100
+# LEARNINT_RATE = 0.01
 
 
-#data preparation
-(x_train, y_train), (x_test, y_test) = mnist.load_data()  #x_train(60000, 28, 28), y_train(60000), x_test(10000, 28, 28), y_test(10000,)  datatype: ndarrays
-print(x_train.shape)
-print(y_train)
-# print(x_test.shape)
-# print(y_test.shape)
+# '''Data preparation
+# '''
+# (x_train, y_train), (x_test, y_test) = mnist.load_data()  #x_train(60000, 28, 28), y_train(60000), x_test(10000, 28, 28), y_test(10000,)  datatype: ndarrays
+# print(x_train.shape)
+# print(y_train)
+# # print(x_test.shape)
+# # print(y_test.shape)
 
-#reshaping training ans test examples
-x_train_flatten = x_train.reshape(x_train.shape[0], -1).T   #(784, 60000)
-y_train_flatten = y_train.reshape(-1, y_train.shape[0])
-x_test_flatten = x_test.reshape(x_test.shape[0], -1).T      #(784, 10000)
-y_train_flatten = y_test.reshape(-1, y_train.shape[0])
+# #reshaping training ans test examples
+# x_train_flatten = x_train.reshape(x_train.shape[0], -1).T   #(784, 60000)
+# y_train_flatten = y_train.reshape(-1, y_train.shape[0])     #(1, 60000)
+# x_test_flatten = x_test.reshape(x_test.shape[0], -1).T      #(784, 10000)
+# y_test_flatten = y_test.reshape(-1, y_test.shape[0])        #(1, 60000)
 
-# print(x_train_flatten)
-print(x_test_flatten.shape)
-print(y_train_flatten)
+# # print(x_train_flatten)
+# print(x_test_flatten.shape)
+# print(y_train_flatten.shape)
 
+'''Helper functions
+'''
 #convert the input data into batchs
 def init_batch(inputs, batch_size):
-    num_full_batch = len(inputs[1]) // batch_size
+    num_full_batch = len(inputs[0]) // batch_size
     batchs = []
     for i in range(num_full_batch):
         batchs.append(inputs[:,i * batch_size : (i+1) * batch_size])
-    if not len(inputs[1]) % batch_size:
+    if len(inputs[0]) % batch_size:
         batchs.append(inputs[:, num_full_batch * batch_size :])
     return batchs
 # print(init_batch(x_train_flatten, BATCH_SIZE))
@@ -74,21 +77,22 @@ def train(w, X, Y, num_iterations, learning_rate, batch_size):
     pass
 
 
-#Problem 1
-#data prepare
-y_sets = []
-for i in range(10):
-    y_sets.append([1 if num == i else 0 for num in y_train])
+# #Problem 1
+# #data prepare
+# y_sets = []
+# for i in range(10):
+#     y_sets.append([1 if num == i else 0 for num in y_train])
 
 
 
-models = []
-layers = [28 * 28, 1]
-parameters = init_parameters(layers) #[[1, 28 * 28]]
+# models = []
+# layers = [28 * 28, 1]
+# parameters = init_parameters(layers) #[[1, 28 * 28]]
 
-#train network with mean square error
-for i in range(10): #number of models for different digit i
-    for epoch in range(EPOCH): #Number of epochs we train, 1 in our case
+# #train network with mean square error
+# for i in range(10): #number of models for different digit i
+#     for epoch in range(EPOCH): #Number of epochs we train, 1 in our case
+#         pass
         
         
 
