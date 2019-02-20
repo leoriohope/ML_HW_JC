@@ -24,6 +24,7 @@ Y_test = np_utils.to_categorical(Y_test_ori)
 
 ''' Compute connect component
 '''
+# Find white regions in images using BFS
 directions = ((-1, 0), (1, 0), (0, -1), (0, 1), (1, 1), (-1, 1), (1, -1), (-1, -1))
 def compute_regions(images):
     regions = []
@@ -50,13 +51,13 @@ def compute_regions(images):
         regions.append(region) 
     return np.asarray([regions])
 
-print(Y_train_ori[:30])
+# print(Y_train_ori[:30])
 train_regions = compute_regions(X_train_ori[:3000]).T
 test_regions = compute_regions(X_test_ori[:3000]).T
-print(train_regions.shape)
+# print(train_regions.shape)
 X_train_new = np.concatenate((X_train[:3000], train_regions), axis=1)
 X_test_new = np.concatenate((X_test[:3000], test_regions), axis=1)
-print(X_train_new.shape)
+# print(X_train_new.shape)
 
 def model():
     model = Sequential()
