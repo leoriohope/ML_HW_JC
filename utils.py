@@ -82,8 +82,6 @@ def multiclass_cross_entropy(Z, Y):
     loss = np.sum(log_likelihood) / m
     return loss
 
-def delta_multiclass_cross_entropy(Z, Y):
-    pass
     
 # Y = np.asarray([[1,2,3]])
 # res = one_hot(Y)

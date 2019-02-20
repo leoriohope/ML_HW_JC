@@ -6,44 +6,39 @@ from data import *
 
 '''Hyper parameters
 '''
-EPOCH = 1
-BATCH_SIZE = 100
-LEARNINT_RATE = 0.0001
+EPOCH = 10
+BATCH_SIZE = 50
+LEARNINT_RATE = 0.01
 NUM_OF_CLASSIFIERS = 10
 
 '''Training
 '''
 parameters = init_parameters([784, 10])
 W = parameters[0]
+# print(W.shape)
 bias = 0
 for epoch in range(EPOCH):
     for batch, X_t in enumerate(x_train_batch):
-        z = np.dot(W, X_t) + bias
+        Z = np.dot(W, X_t) + bias
+        A = softmax(Z)
         y = y_train_onehot_batch[batch]
-        cost = multiclass_cross_entropy(z, y_train_batch_sets[i][batch])
-        # print(cost)
-        dW = np.dot(z - y, X_t.T)
-        db = z - y
-        W -= LEARNINT_RATE * dW
+        dW = np.dot(X_t, (A - y).T) / BATCH_SIZE
+        db = np.sum((A - y) / BATCH_SIZE)
+        W -= LEARNINT_RATE * dW.T
         bias -= LEARNINT_RATE * db
-        # cost, dw = mean_square_cost(X_t, output, y_train_batch_sets[i][batch])
-        # parameter[0] -= LEARNINT_RATE * dw.T #updata parameter
-        if not batch % 100:
-            print("model %d cost: " % i + str(cost))
+        # if not batch % 100:
+        #     print("cost: " + str(cost))
+    Y_test_predict = np.argmax(softmax(np.dot(W, x_test_flatten) + bias), axis=0).reshape(1, 10000)
+    accuracy = np.mean(Y_test_predict == y_test_flatten)
+    print("Epoch %d:" % epoch)
+    print("Accuracy: " + str(accuracy) + '\n')
 
-# ''' Predicting
-# '''
-# def predict(classifiers, X): #prediction function using argmax for 10 models
-#     outputs = []
-#     for parameter in classifiers:
-#         outputs.append(sigmoid(X, parameter[0]))
-#     return np.argmax(outputs, axis=0)
-
-# print("First ten test label: ")
-# print((y_test_flatten[0][:40]))
-# print("First ten predict label: ")
-# print(predict(classifiers, x_test_flatten[:, :40]))
-
-# test_output = predict(classifiers, x_test_flatten)
-# accuracy = np.sum(np.equal(y_test_flatten[0], test_output[0])) / len(y_test_flatten[0])
-# print("Accuracy: " + str(accuracy))
+''' Predicting
+'''
+Y_test_predict = np.argmax(softmax(np.dot(W, x_test_flatten) + bias), axis=0).reshape(1, 10000)
+accuracy = np.mean(Y_test_predict == y_test_flatten)
+print("\nFinal Accuracy: " + str(accuracy))
+print("First 10 labels: ")
+print(y_test_flatten[:10])
+print("First 10 prediction: ")
+print(Y_test_predict[:10])
