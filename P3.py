@@ -8,22 +8,28 @@ from data import *
 '''
 EPOCH = 1
 BATCH_SIZE = 100
-LEARNINT_RATE = 0.000001
+LEARNINT_RATE = 0.0001
 NUM_OF_CLASSIFIERS = 10
 
 '''Training
 '''
-parameter = init_parameters([784, 10])
+parameters = init_parameters([784, 10])
+W = parameters[0]
 bias = 0
 for epoch in range(EPOCH):
-    for batch, X_t in enumerate(x_train_batch[:1]):
-        z = np.dot(parameter, X_t) + bias
+    for batch, X_t in enumerate(x_train_batch):
+        z = np.dot(W, X_t) + bias
+        y = y_train_onehot_batch[batch]
         cost = multiclass_cross_entropy(z, y_train_batch_sets[i][batch])
-        print(cost)
+        # print(cost)
+        dW = np.dot(z - y, X_t.T)
+        db = z - y
+        W -= LEARNINT_RATE * dW
+        bias -= LEARNINT_RATE * db
         # cost, dw = mean_square_cost(X_t, output, y_train_batch_sets[i][batch])
         # parameter[0] -= LEARNINT_RATE * dw.T #updata parameter
-        # if not batch % 100:
-        #     print("model %d cost: " % i + str(cost))
+        if not batch % 100:
+            print("model %d cost: " % i + str(cost))
 
 # ''' Predicting
 # '''

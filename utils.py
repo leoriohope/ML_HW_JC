@@ -77,7 +77,7 @@ def multiclass_cross_entropy(Z, Y):
     Y = Y.T 
     Z = Z.T
     m = Y.shape[0]
-    p = softmax(A)
+    p = softmax(Z)
     log_likelihood = -np.log(p[range(m), Y])
     loss = np.sum(log_likelihood) / m
     return loss

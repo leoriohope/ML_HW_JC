@@ -26,7 +26,7 @@ y_test_onehot = one_hot(y_test_flatten)   # (10, 10000)
 #Init x_batch ans y_batch
 x_train_batch = init_batch(x_train_flatten, batch_size=BATCH_SIZE) # (600, 784, 100)
 x_test_batch = init_batch(x_test_flatten, batch_size=BATCH_SIZE)   # (100, 784, 100)
-y_trian_onehot_batch = init_batch(y_train_onehot, batch_size=BATCH_SIZE) #(600, 10, 100)
+y_train_onehot_batch = init_batch(y_train_onehot, batch_size=BATCH_SIZE) #(600, 10, 100)
 # print(y_train_flatten[0][:3])
 # print(y_trian_onehot_batch[0][:, :3])
 
