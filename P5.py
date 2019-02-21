@@ -8,6 +8,8 @@ from keras.utils import np_utils
 from keras import models
 from keras import layers
 
+NUM_OF_SAMPLES = 10000
+
 '''data preparation
 '''
 (X_train_ori, Y_train_ori), (X_test_ori, Y_test_ori) = mnist.load_data()
@@ -37,11 +39,11 @@ def compute_regions(images):
             for j in range(copy.shape[1]):
                 q = []
                 if copy[i][j] == 0:
+                    copy[i][j] = 1
                     region += 1
                     q.append((i, j))
                     while (q):
                         x_curr, y_curr = q.pop(0)
-                        # copy[x_curr][y_curr] = 1
                         for d in directions:
                             x_next = x_curr + d[0]
                             y_next = y_curr + d[1]
@@ -51,14 +53,17 @@ def compute_regions(images):
         regions.append(region) 
     return np.asarray([regions])
 
-# print(Y_train_ori[:30])
-train_regions = compute_regions(X_train_ori[:3000]).T
-test_regions = compute_regions(X_test_ori[:3000]).T
+'''Compute region feature and Concatenatse
+'''
+train_regions = compute_regions(X_train_ori[:NUM_OF_SAMPLES]).T / 3
+test_regions = compute_regions(X_test_ori[:NUM_OF_SAMPLES]).T / 3
 # print(train_regions.shape)
-X_train_new = np.concatenate((X_train[:3000], train_regions), axis=1)
-X_test_new = np.concatenate((X_test[:3000], test_regions), axis=1)
+X_train_new = np.concatenate((X_train[:NUM_OF_SAMPLES], train_regions), axis=1)
+X_test_new = np.concatenate((X_test[:NUM_OF_SAMPLES], test_regions), axis=1)
 # print(X_train_new.shape)
 
+'''Train and Validation
+'''
 def model():
     model = Sequential()
     model.add(Dense(10, activation='softmax', input_shape=(28 * 28 + 1,)))
@@ -67,7 +72,12 @@ def model():
     return model
 #Setup model
 model = model()
-model.fit(X_train_new[:3000], Y_train[:3000], epochs=10, batch_size=100, validation_data=(X_test_new[:3000], Y_test[:3000]))
+model.fit(X_train_new[:NUM_OF_SAMPLES], Y_train[:NUM_OF_SAMPLES], epochs=10, batch_size=100, validation_data=(X_test_new[:NUM_OF_SAMPLES], Y_test[:NUM_OF_SAMPLES]))
+
+print('\nTest Labels:')
+print(Y_train_ori[:10])
+print('White Regions')
+print(train_regions.T[0][:10] * 3)
 
 
 
